@@ -705,6 +705,16 @@
         <button class="btn btn-ghost" id="historyBtn" aria-label="Verlauf">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </button>
+        <button class="btn btn-ghost" id="settingsBtn" aria-label="Einstellungen">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+      <div class="source-row" style="margin-top:8px">
+        <label class="btn btn-ghost" style="flex:1;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          M3U-Datei hochladen
+          <input type="file" id="fileInput" accept=".m3u,.m3u8,.txt,text/plain" style="display:none">
+        </label>
       </div>
       <div class="source-meta">
         <span id="sourceStatus"><span class="dot">●</span> Bereit</span>
@@ -815,6 +825,44 @@
   </div>
 </div>
 
+<!-- Settings Modal -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <h2>Einstellungen</h2>
+    <p>Wenn eine Playlist nicht direkt lädt (CORS-Fehler), versucht der Player automatisch öffentliche Proxies. Für mehr Zuverlässigkeit kannst du einen eigenen Proxy eintragen.</p>
+
+    <div style="margin-top:18px">
+      <label style="font-size:13px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:8px">Proxy-Modus</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="cat-chip proxy-mode" data-mode="auto">Auto (Empfohlen)</button>
+        <button class="cat-chip proxy-mode" data-mode="direct">Nur direkt</button>
+        <button class="cat-chip proxy-mode" data-mode="proxy">Immer Proxy</button>
+        <button class="cat-chip proxy-mode" data-mode="custom">Eigener Proxy</button>
+      </div>
+    </div>
+
+    <div id="customProxyWrap" style="margin-top:16px;display:none">
+      <label style="font-size:13px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:8px">Eigene Proxy-URL</label>
+      <input type="url" class="source-input" id="customProxyInput" placeholder="https://mein-worker.workers.dev/?url=" style="width:100%">
+      <p style="font-size:12px;color:var(--text-faint);margin-top:8px;line-height:1.5">
+        Format: Die URL muss mit <code style="background:var(--bg-3);padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace">?url=</code> enden — der Player hängt die Ziel-URL automatisch URL-encoded an.
+      </p>
+    </div>
+
+    <div style="margin-top:18px;padding:14px;background:var(--bg-2);border-radius:12px;border:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">💡 Eigenen Proxy einrichten</div>
+      <div style="font-size:12px;color:var(--text-dim);line-height:1.6">
+        Erstelle einen kostenlosen <strong>Cloudflare Worker</strong> (5 Min, 100k Requests/Tag gratis). Anleitung steht in der README im GitHub-Repo.
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelSettingsBtn">Abbrechen</button>
+      <button class="btn btn-primary" id="saveSettingsBtn">Speichern</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (() => {
   'use strict';
@@ -830,7 +878,27 @@
     history: JSON.parse(localStorage.getItem('lumen_history') || '[]'),
     hls: null,
     query: '',
+    proxyMode: localStorage.getItem('lumen_proxy_mode') || 'auto',
+    customProxy: localStorage.getItem('lumen_custom_proxy') || '',
   };
+
+  // ============ CORS PROXIES ============
+  // Reihenfolge = Fallback-Reihenfolge. Alle akzeptieren ?url=<encoded URL>
+  const PUBLIC_PROXIES = [
+    u => 'https://corsproxy.io/?' + encodeURIComponent(u),
+    u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+    u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
+  ];
+
+  function proxify(url) {
+    if (state.proxyMode === 'custom' && state.customProxy) {
+      return [state.customProxy + encodeURIComponent(url)];
+    }
+    if (state.proxyMode === 'direct') return [url];
+    if (state.proxyMode === 'proxy') return PUBLIC_PROXIES.map(fn => fn(url));
+    // auto: direkt zuerst, dann alle proxies
+    return [url, ...PUBLIC_PROXIES.map(fn => fn(url))];
+  }
 
   // ============ DOM ============
   const $ = id => document.getElementById(id);
@@ -893,24 +961,64 @@
   // ============ LOAD PLAYLIST ============
   async function loadPlaylist(url) {
     if (!url) return;
-    setStatus('Lade Playlist...', 'loading');
+    const urls = proxify(url);
+    let lastError = null;
+
+    for (let i = 0; i < urls.length; i++) {
+      const tryUrl = urls[i];
+      const isDirect = i === 0 && state.proxyMode !== 'proxy' && state.proxyMode !== 'custom';
+      const label = isDirect ? 'direkt' : (state.proxyMode === 'custom' ? 'eigener Proxy' : `Proxy ${state.proxyMode === 'proxy' ? i + 1 : i}/${urls.length - 1}`);
+      setStatus(`Lade Playlist (${label})...`, 'loading');
+
+      try {
+        const ctrl = new AbortController();
+        const timeoutId = setTimeout(() => ctrl.abort(), 15000);
+        const res = await fetch(tryUrl, { signal: ctrl.signal });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const text = await res.text();
+        if (!text.includes('#EXTM3U') && !text.includes('#EXTINF')) {
+          throw new Error('Keine gültige M3U-Datei');
+        }
+        const items = parseM3U(text);
+        if (items.length === 0) throw new Error('Keine Sender gefunden');
+
+        state.channels = items;
+        addToHistory(url); // immer Original-URL speichern
+        setStatus(`● ${items.length} Einträge (${label})`, 'ok');
+        render();
+        return; // erfolgreich → raus
+      } catch (e) {
+        console.warn(`Lade-Versuch ${i + 1} fehlgeschlagen:`, e.message);
+        lastError = e;
+        // weiter zum nächsten
+      }
+    }
+
+    // Alle Versuche fehlgeschlagen
+    setStatus('Fehler: ' + (lastError?.message || 'Unbekannt'), 'error');
+    showError(
+      'Playlist konnte nicht geladen werden. ' +
+      'Versuche: ① einen anderen Proxy-Modus in den Einstellungen, ' +
+      '② die M3U-Datei direkt hochzuladen (Button unter dem URL-Feld), ' +
+      'oder ③ einen eigenen Cloudflare-Worker einzurichten.'
+    );
+  }
+
+  async function loadPlaylistFromText(text, sourceLabel) {
     try {
-      const res = await fetch(url, { mode: 'cors' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
       if (!text.includes('#EXTM3U') && !text.includes('#EXTINF')) {
         throw new Error('Keine gültige M3U-Datei');
       }
       const items = parseM3U(text);
       if (items.length === 0) throw new Error('Keine Sender gefunden');
       state.channels = items;
-      addToHistory(url);
-      setStatus(`● ${items.length} Einträge geladen`, 'ok');
+      setStatus(`● ${items.length} Einträge (${sourceLabel})`, 'ok');
       render();
     } catch (e) {
-      console.error(e);
       setStatus('Fehler: ' + e.message, 'error');
-      showError('Playlist konnte nicht geladen werden: ' + e.message + '. Tipp: CORS-Probleme bei einigen Anbietern.');
+      showError('Datei konnte nicht verarbeitet werden: ' + e.message);
     }
   }
 
@@ -1111,7 +1219,12 @@
     const isHls = /\.m3u8(\?|$)/i.test(url);
 
     if (isHls && window.Hls && Hls.isSupported()) {
-      const hls = new Hls({ enableWorker: true, lowLatencyMode: true, maxBufferLength: 30 });
+      const hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: true,
+        maxBufferLength: 30,
+        xhrSetup: function(xhr) { xhr.withCredentials = false; }
+      });
       state.hls = hls;
       hls.loadSource(url);
       hls.attachMedia(video);
@@ -1119,8 +1232,32 @@
         video.play().catch(()=>{});
         loader.classList.remove('show');
       });
+      let retried = false;
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) {
+          // Bei Netzwerk-Fehler: einmal mit Proxy versuchen
+          if (!retried && data.type === 'networkError' && state.proxyMode !== 'direct') {
+            retried = true;
+            console.warn('HLS direkt fehlgeschlagen, versuche Proxy...');
+            hls.destroy();
+            const proxyUrl = PUBLIC_PROXIES[0](url);
+            const hls2 = new Hls({ enableWorker: true, lowLatencyMode: true });
+            state.hls = hls2;
+            hls2.loadSource(proxyUrl);
+            hls2.attachMedia(video);
+            hls2.on(Hls.Events.MANIFEST_PARSED, () => {
+              video.play().catch(()=>{});
+              loader.classList.remove('show');
+            });
+            hls2.on(Hls.Events.ERROR, (_, d2) => {
+              if (d2.fatal) {
+                loader.classList.remove('show');
+                showError('Stream-Fehler (auch via Proxy): ' + (d2.details || d2.type));
+                hls2.destroy();
+              }
+            });
+            return;
+          }
           loader.classList.remove('show');
           showError('Stream-Fehler: ' + (data.details || data.type));
           hls.destroy();
@@ -1160,6 +1297,55 @@
   // ============ EVENTS ============
   $('loadBtn').addEventListener('click', () => loadPlaylist($('m3uInput').value.trim()));
   $('m3uInput').addEventListener('keydown', e => { if (e.key === 'Enter') loadPlaylist(e.target.value.trim()); });
+
+  // File Upload
+  $('fileInput').addEventListener('change', async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setStatus('Lese Datei...', 'loading');
+    try {
+      const text = await file.text();
+      loadPlaylistFromText(text, 'Datei: ' + file.name);
+    } catch (err) {
+      setStatus('Datei-Fehler', 'error');
+      showError('Datei konnte nicht gelesen werden: ' + err.message);
+    }
+    e.target.value = ''; // reset für nächste Auswahl
+  });
+
+  // Settings Modal
+  function updateProxyModeUI() {
+    document.querySelectorAll('.proxy-mode').forEach(el => {
+      el.classList.toggle('active', el.dataset.mode === state.proxyMode);
+    });
+    $('customProxyWrap').style.display = state.proxyMode === 'custom' ? 'block' : 'none';
+    $('customProxyInput').value = state.customProxy;
+  }
+
+  $('settingsBtn').addEventListener('click', () => {
+    updateProxyModeUI();
+    $('settingsModal').classList.add('show');
+  });
+
+  document.querySelectorAll('.proxy-mode').forEach(el => {
+    el.addEventListener('click', () => {
+      state.proxyMode = el.dataset.mode;
+      updateProxyModeUI();
+    });
+  });
+
+  $('saveSettingsBtn').addEventListener('click', () => {
+    state.customProxy = $('customProxyInput').value.trim();
+    localStorage.setItem('lumen_proxy_mode', state.proxyMode);
+    localStorage.setItem('lumen_custom_proxy', state.customProxy);
+    $('settingsModal').classList.remove('show');
+    setStatus('● Einstellungen gespeichert', 'ok');
+  });
+
+  $('cancelSettingsBtn').addEventListener('click', () => $('settingsModal').classList.remove('show'));
+  $('settingsModal').addEventListener('click', e => {
+    if (e.target === $('settingsModal')) $('settingsModal').classList.remove('show');
+  });
 
   $('searchInput').addEventListener('input', e => {
     state.query = e.target.value.trim();
